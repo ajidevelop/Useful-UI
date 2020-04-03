@@ -5,6 +5,7 @@ body {
 }
 
 /* Slideshow */
+
 .slidershow {
   width: 80%;
   overflow: hidden;
@@ -32,12 +33,13 @@ body {
   border: 2px solid #fff;
   margin: 5px;
   cursor: pointer;
-}
-.bar :hover {
-  background: #fff;
+
+  :hover {
+    background: #fff;
+  }
 }
 
-input[name=r] {
+input[name="r"] {
   position: absolute;
   visibility: hidden;
 }
@@ -50,9 +52,8 @@ input[name=r] {
 
 .slide {
   transition: 0.6s;
-}
-.slide img {
-  width: 100%;
-}
 
-/*# sourceMappingURL=style.css.map */
+  img {
+    width: 100%;
+  }
+}
