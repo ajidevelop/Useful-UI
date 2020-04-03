@@ -7,4 +7,5 @@ The slider is as easy as adding new images. It automatically accounts for the nu
   
   
 ## Features
-* The `data-class` field controls the class attached to the navigation bar
+* `data-class` field controls the class attached to the navigation bar and defaults to the predefined `bar` class.
+* `data-interval` field control how long each transition is in seconds
