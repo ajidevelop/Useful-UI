@@ -4,6 +4,7 @@ $(function() {
     let nav = $(".navigation");
     let interval = parseInt($(".slidershow").attr('data-interval'));
     let labelClass = $(".slidershow").attr('data-class');
+    labelClass = typeof undefined || labelClass === '' ? 'bar' : labelClass;
     let margin = 100/imageCount;
     let style = `<style type='text/css'> 
                     .slides { 
