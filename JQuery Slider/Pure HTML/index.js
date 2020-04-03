@@ -1,11 +1,11 @@
-$(document).ready(function() {
-    var imageCount = $(".slides div").length - 1;
-    var slides = $(".slides");
-    var nav = $(".navigation");
-    var interval = parseInt($(".slidershow").attr('data-interval'));
-    var labelClass = $(".slidershow").attr('data-class')
-    var margin = 100/imageCount;
-    var style = `<style type='text/css'> 
+$(function() {
+    let imageCount = $(".slides div").length - 1;
+    let slides = $(".slides");
+    let nav = $(".navigation");
+    let interval = parseInt($(".slidershow").attr('data-interval'));
+    let labelClass = $(".slidershow").attr('data-class');
+    let margin = 100/imageCount;
+    let style = `<style type='text/css'> 
                     .slides { 
                         width: ${imageCount * 100}%;
                     }
@@ -13,23 +13,23 @@ $(document).ready(function() {
                         width: ${margin}%;
                     }`;
 
-    for (i = imageCount; i >= 1; i--) {
-        var navID = "r" + i;
-        var inputNavigation = jQuery('<input>', {
+    for (let i = imageCount; i >= 1; i--) {
+        let navID = "r" + i;
+        let inputNavigation = jQuery('<input>', {
             type: 'radio',
             name: 'r',
             id: navID
         });
-        var labelNavigation = jQuery('<label></label>', {
+        let labelNavigation = jQuery('<label></label>', {
             class: labelClass,
             for: navID,
         });
 
-        labelNavigation.click(function(e) {
+        labelNavigation.on('click', (function(e) {
             if(e.hasOwnProperty('originalEvent'))
                 stop()
-        });
-        style += `#${navID}:checked ~ .s1 { margin-left: ${-margin * (i - 1)}%; }`
+        }));
+        style += `#${navID}:checked ~ .s1 { margin-left: ${-margin * (i - 1)}%; }`;
         slides.prepend(inputNavigation);
         nav.prepend(labelNavigation);
         
@@ -42,12 +42,12 @@ $(document).ready(function() {
 });
 
 function autoplay(i, interval) {
-    var list = $("label");
+    let list = $("label");
     if (!list[i])
         i = 0;
 
     $(list[i]).trigger("click");
-    timer = setTimeout(function() {
+    let timer = setTimeout(function() {
         autoplay(i + 1, interval);
     }, interval * 1000);
 
@@ -56,8 +56,4 @@ function autoplay(i, interval) {
         timer = 0;
     }
     return stop;
-};
-
-function stopAutoplayer(method) {
-    method()
 }
