@@ -2,16 +2,21 @@ $(function() {
     let imageCount = $(".slides div").length - 1;
     let slides = $(".slides");
     let nav = $(".navigation");
+
     let interval = parseInt($(".slidershow").attr('data-interval'));
     let labelClass = $(".slidershow").attr('data-class');
+    let speed = $(".slidershow").attr('data-speed');
+
     labelClass = typeof undefined || labelClass === '' ? 'bar' : labelClass;
     let margin = 100/imageCount;
+
     let style = `<style type='text/css'> 
                     .slides { 
                         width: ${imageCount * 100}%;
                     }
                     .slide {
                         width: ${margin}%;
+                        transition: ${speed};
                     }`;
 
     for (let i = imageCount; i >= 1; i--) {
@@ -23,23 +28,23 @@ $(function() {
         });
         let labelNavigation = jQuery('<label></label>', {
             class: labelClass,
-            for: navID,
+            for: navID, 
         });
 
         labelNavigation.on('click', (function(e) {
-            if(e.hasOwnProperty('originalEvent'))
-                stop()
+            if(e.hasOwnProperty('originalEvent')) {
+                stop();
+            }
         }));
         style += `#${navID}:checked ~ .s1 { margin-left: ${-margin * (i - 1)}%; }`;
         slides.prepend(inputNavigation);
         nav.prepend(labelNavigation);
-        
-
     }
     style += '</style>';
     $(style).appendTo('head');
     $('#r1').attr('checked', 'checked');
     stop = autoplay(0, interval);
+    // stop();
 });
 
 function autoplay(i, interval) {
@@ -47,6 +52,10 @@ function autoplay(i, interval) {
     if (!list[i])
         i = 0;
 
+    if (timer) {
+        clearTimeout(timer);
+        timer = null;
+    }
     $(list[i]).trigger("click");
     let timer = setTimeout(function() {
         autoplay(i + 1, interval);
