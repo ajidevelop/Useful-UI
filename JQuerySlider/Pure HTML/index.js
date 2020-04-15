@@ -1,11 +1,14 @@
-$(function() {
-    let imageCount = $(".slides div").length - 1;
-    let slides = $(".slides");
-    let nav = $(".navigation");
+let checkedLabel = null;
 
-    let interval = parseInt($(".slidershow").attr('data-interval'));
-    let labelClass = $(".slidershow").attr('data-class');
-    let speed = $(".slidershow").attr('data-speed');
+$(function() {
+    let sliderShow = $(".slidershow");
+    let imageCount = $(sliderShow).find(".slides div").length - 1;
+    let slides = $(sliderShow).find(".slides");
+    let nav = $(sliderShow).find(".navigation");
+
+    let interval = parseInt(sliderShow.attr('data-interval'));
+    let labelClass = sliderShow.attr('data-class');
+    let speed = sliderShow.attr('data-speed');
 
     labelClass = typeof undefined || labelClass === '' ? 'bar' : labelClass;
     let margin = 100/imageCount;
@@ -35,6 +38,14 @@ $(function() {
             if(e.hasOwnProperty('originalEvent')) {
                 stop();
             }
+            e = e.currentTarget;
+            let labelList = $(sliderShow).find('label');
+            checkedLabel = labelList[$(e).attr('for')[1] - 1];
+
+            $(labelList).each(function(idx) {
+                $(labelList[idx]).removeAttr('checked');
+            });
+            $(checkedLabel).attr('checked', 'checked');
         }));
         style += `#${navID}:checked ~ .s1 { margin-left: ${-margin * (i - 1)}%; }`;
         slides.prepend(inputNavigation);
@@ -43,26 +54,50 @@ $(function() {
     style += '</style>';
     $(style).appendTo('head');
     $('#r1').attr('checked', 'checked');
+    checkedLabel = $(sliderShow).find('label')[0];
     stop = autoplay(0, interval);
-    // stop();
+
+    sliderShow.find('img').on('swipeleft', function() {
+        let list = $(sliderShow).find('label');
+        let currLabel = null;
+        for (let i = 0; i < list.length; i++) {
+            currLabel = list[i];
+            if ($(currLabel).attr('checked') === 'checked') {
+                currLabel = i + 1 !== list.length ? list[i + 1] : list[0]
+                break;
+            }
+        }
+        $(currLabel).trigger('click');
+    });
+
+    sliderShow.find('img').on('swiperight', function() {
+        let list = $(sliderShow).find('label');
+        let currLabel = null;
+        for (let i = 0; i < list.length; i++) {
+            currLabel = list[i];
+            if ($(currLabel).attr('checked') === 'checked') {
+                currLabel = i - 1 !== 0 ? list[i - 1] : list[list.length - 1]
+                break;
+            }
+        }
+        $(currLabel).trigger('click');
+    })
+
 });
 
 function autoplay(i, interval) {
-    let list = $("label");
+    let list = $(".slidershow label");
     if (!list[i])
         i = 0;
 
-    if (timer) {
-        clearTimeout(timer);
-        timer = null;
-    }
     $(list[i]).trigger("click");
+
     let timer = setTimeout(function() {
         autoplay(i + 1, interval);
     }, interval * 1000);
 
     function stop() {
-        clearTimeout(timer);
+        console.log(clearTimeout(timer));
         timer = 0;
     }
     return stop;
