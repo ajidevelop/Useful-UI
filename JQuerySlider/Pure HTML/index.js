@@ -1,7 +1,6 @@
 let checkedLabel = null;
 
 $(function() {
-    $.mobile.loader.prototype.options.textVisible = false;
     let sliderShow = $(".slidershow");
     let imageCount = $(sliderShow).find(".slides div").length - 1;
     let slides = $(sliderShow).find(".slides");
@@ -10,9 +9,17 @@ $(function() {
     let interval = parseInt(sliderShow.attr('data-interval'));
     let labelClass = sliderShow.attr('data-class');
     let speed = sliderShow.attr('data-speed');
+    let hideNavArrows = parseInt(sliderShow.attr('data-hideNavArrows'));
+    let hideNavigation = parseInt(sliderShow.attr('data-hideNavigation'));
+
+    if (hideNavigation) {
+        nav.css('display', 'none');
+    } else if (hideNavArrows) {
+        nav.find('#arrow-left, #arrow-right').css('display', 'none');
+    }
 
     labelClass = typeof undefined || labelClass === '' ? 'bar' : labelClass;
-    let margin = 100/imageCount;
+    let margin = 100 / imageCount;
 
     let style = `<style type='text/css'> 
                     .slides { 
@@ -57,17 +64,25 @@ $(function() {
     $(style).appendTo('head');
     $('#r1').attr('checked', 'checked');
     checkedLabel = $(sliderShow).find('label')[0];
+    $(nav).find('#arrow-left').prependTo(nav);
+
     stop = autoplay(0, interval);
 
-    sliderShow.find('img').on('swipeleft', function() {
+    nav.find('#arrow-right').on('click', function () {
+        moveSlide();
+    })
+    sliderShow.find('img').on('swipeleft', function () {
         moveSlide();
     });
 
-    sliderShow.find('img').on('swiperight', function() {
+    nav.find('#arrow-left').on('click', function () {
+        moveSlide(false);
+    })
+    sliderShow.find('img').on('swiperight', function () {
         moveSlide(false);
     })
 
-    function moveSlide(moveRight=true) {
+    function moveSlide(moveRight = true) {
         let list = $(sliderShow).find('label');
         let currLabel = null;
         for (let i = 0; i < list.length; i++) {
@@ -83,7 +98,6 @@ $(function() {
         }
         $(currLabel).trigger('click');
     }
-
 });
 
 function autoplay(i, interval) {
