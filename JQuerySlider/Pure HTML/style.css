@@ -4,6 +4,7 @@ body {
   padding: 0;
 }
 
+/* Disable Jquery loader */
 .ui-loader {
   display: none !important;
 }
