@@ -4,6 +4,17 @@ body {
   padding: 0;
 }
 
+/* Disable Jquery loader */
+.ui-loader {
+  display: none !important;
+}
+
+/* Arrow Keys */
+.material-icons {
+  color: #ffffff;
+  cursor: pointer;
+}
+
 /* Slideshow */
 
 .slidershow {
