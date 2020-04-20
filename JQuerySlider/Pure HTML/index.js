@@ -1,6 +1,7 @@
 let checkedLabel = null;
 
 $(function() {
+    $.mobile.loader.prototype.options.textVisible = false;
     let sliderShow = $(".slidershow");
     let imageCount = $(sliderShow).find(".slides div").length - 1;
     let slides = $(sliderShow).find(".slides");
@@ -58,30 +59,26 @@ $(function() {
     stop = autoplay(0, interval);
 
     sliderShow.find('img').on('swipeleft', function() {
-        let list = $(sliderShow).find('label');
-        let currLabel = null;
-        for (let i = 0; i < list.length; i++) {
-            currLabel = list[i];
-            if ($(currLabel).attr('checked') === 'checked') {
-                currLabel = i + 1 !== list.length ? list[i + 1] : list[0]
-                break;
-            }
-        }
-        $(currLabel).trigger('click');
+        moveSlide(false);
     });
 
     sliderShow.find('img').on('swiperight', function() {
+        moveSlide();
+    })
+
+    function moveSlide(moveRight=true) {
         let list = $(sliderShow).find('label');
         let currLabel = null;
         for (let i = 0; i < list.length; i++) {
             currLabel = list[i];
             if ($(currLabel).attr('checked') === 'checked') {
-                currLabel = i - 1 !== 0 ? list[i - 1] : list[list.length - 1]
+                currLabel = moveRight ? (i - 1 !== 0 ? list[i - 1] : list[list.length - 1]) : (i + 1 !== list.length ? list[i+1] : list[0]);
+                console.log(currLabel);
                 break;
             }
         }
         $(currLabel).trigger('click');
-    })
+    }
 
 });
 
