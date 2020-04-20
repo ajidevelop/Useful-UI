@@ -30,6 +30,7 @@ $(function() {
             name: 'r',
             id: navID
         });
+        // noinspection CheckTagEmptyBody
         let labelNavigation = jQuery('<label></label>', {
             class: labelClass,
             for: navID, 
@@ -59,11 +60,11 @@ $(function() {
     stop = autoplay(0, interval);
 
     sliderShow.find('img').on('swipeleft', function() {
-        moveSlide(false);
+        moveSlide();
     });
 
     sliderShow.find('img').on('swiperight', function() {
-        moveSlide();
+        moveSlide(false);
     })
 
     function moveSlide(moveRight=true) {
@@ -72,8 +73,11 @@ $(function() {
         for (let i = 0; i < list.length; i++) {
             currLabel = list[i];
             if ($(currLabel).attr('checked') === 'checked') {
-                currLabel = moveRight ? (i - 1 !== 0 ? list[i - 1] : list[list.length - 1]) : (i + 1 !== list.length ? list[i+1] : list[0]);
-                console.log(currLabel);
+                if (moveRight === true) {
+                    currLabel = i + 1 !== list.length ? list[i + 1] : list[0];
+                } else {
+                    currLabel = i - 1 !== -1 ? list[i - 1] : list[list.length - 1];
+                }
                 break;
             }
         }
@@ -94,7 +98,6 @@ function autoplay(i, interval) {
     }, interval * 1000);
 
     function stop() {
-        console.log(clearTimeout(timer));
         timer = 0;
     }
     return stop;
