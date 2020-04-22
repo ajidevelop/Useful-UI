@@ -8,4 +8,4 @@ This is a repository with several UI elements that are easy to drop into sites. 
      respective element label. Thank you and enjoy.
      
 ## List of Current Elements
-* Slider
+* Image Slider
