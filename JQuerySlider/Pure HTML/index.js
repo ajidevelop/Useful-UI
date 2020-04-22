@@ -27,7 +27,7 @@ $(function() {
                     }
                     .slide {
                         width: ${margin}%;
-                        transition: ${speed};
+                        transition: ${speed}s;
                     }`;
 
     for (let i = imageCount; i >= 1; i--) {
