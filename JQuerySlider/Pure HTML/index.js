@@ -5,6 +5,8 @@ $(function() {
     let imageCount = $(sliderShow).find(".slides div").length - 1;
     let slides = $(sliderShow).find(".slides");
     let nav = $(sliderShow).find(".navigation");
+    let imgList = $(sliderShow).find('img');
+
 
     let interval = parseInt(sliderShow.attr('data-interval'));
     let labelClass = sliderShow.attr('data-class');
@@ -31,6 +33,11 @@ $(function() {
                     }`;
 
     for (let i = imageCount; i >= 1; i--) {
+        if (i === 1)
+            $(imgList[i - 1]).css('display', 'block');
+        else
+            $(imgList[i - 1]).css('display', 'none');
+
         let navID = "r" + i;
         let inputNavigation = jQuery('<input>', {
             type: 'radio',
@@ -44,16 +51,20 @@ $(function() {
         });
 
         labelNavigation.on('click', (function(e) {
-            if(e.hasOwnProperty('originalEvent')) {
-                stop();
+            if (e.hasOwnProperty('originalEvent')) {
+                clearInterval(timer);
             }
             e = e.currentTarget;
             let labelList = $(sliderShow).find('label');
-            checkedLabel = labelList[$(e).attr('for')[1] - 1];
+            let newLabelIdx = $(e).attr('for')[1] - 1;
+            checkedLabel = labelList[newLabelIdx];
+            let imgTarget = imgList[newLabelIdx];
 
-            $(labelList).each(function(idx) {
+            $(labelList).each(function (idx) {
                 $(labelList[idx]).removeAttr('checked');
+                $(imgList[idx]).css('display', 'none');
             });
+            $(imgTarget).css('display', `block`);
             $(checkedLabel).attr('checked', 'checked');
         }));
         style += `#${navID}:checked ~ .s1 { margin-left: ${-margin * (i - 1)}%; }`;
@@ -62,57 +73,46 @@ $(function() {
     }
     style += '</style>';
     $(style).appendTo('head');
-    $('#r1').attr('checked', 'checked');
+    sliderShow.find('label[for=r1]').attr('checked', 'checked');
     checkedLabel = $(sliderShow).find('label')[0];
     $(nav).find('#arrow-left').prependTo(nav);
 
-    stop = autoplay(0, interval);
+    let timer = setInterval(function () {
+        moveSlide();
+    }, interval * 1000);
 
     nav.find('#arrow-right').on('click', function () {
-        moveSlide();
+        moveSlide(true, timer);
     })
     sliderShow.find('img').on('swipeleft', function () {
-        moveSlide();
+        moveSlide(true, timer);
     });
 
     nav.find('#arrow-left').on('click', function () {
-        moveSlide(false);
+        moveSlide(false, timer);
     })
     sliderShow.find('img').on('swiperight', function () {
-        moveSlide(false);
+        moveSlide(false, timer);
     })
-
-    function moveSlide(moveRight = true) {
-        let list = $(sliderShow).find('label');
-        let currLabel = null;
-        for (let i = 0; i < list.length; i++) {
-            currLabel = list[i];
-            if ($(currLabel).attr('checked') === 'checked') {
-                if (moveRight === true) {
-                    currLabel = i + 1 !== list.length ? list[i + 1] : list[0];
-                } else {
-                    currLabel = i - 1 !== -1 ? list[i - 1] : list[list.length - 1];
-                }
-                break;
-            }
-        }
-        $(currLabel).trigger('click');
-    }
 });
 
-function autoplay(i, interval) {
-    let list = $(".slidershow label");
-    if (!list[i])
-        i = 0;
-
-    $(list[i]).trigger("click");
-
-    let timer = setTimeout(function() {
-        autoplay(i + 1, interval);
-    }, interval * 1000);
-
-    function stop() {
-        timer = 0;
+function moveSlide(moveRight = true, timer = null) {
+    let sliderShow = $(".slidershow");
+    let labelList = $(sliderShow).find('label');
+    let currLabel = null;
+    for (let i = 0; i < labelList.length; i++) {
+        currLabel = labelList[i];
+        if ($(currLabel).attr('checked') === 'checked') {
+            if (moveRight === true) {
+                currLabel = i + 1 !== labelList.length ? labelList[i + 1] : labelList[0];
+            } else {
+                currLabel = i - 1 !== -1 ? labelList[i - 1] : labelList[labelList.length - 1];
+            }
+            break;
+        }
     }
-    return stop;
+    $(currLabel).trigger('click');
+    if (timer !== null) {
+        clearInterval(timer);
+    }
 }
