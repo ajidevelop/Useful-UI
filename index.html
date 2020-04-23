@@ -6,5 +6,26 @@
 </head>
 <body>
 
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCTXSrlfqczpL8jzuLrkl-tKz_UsIfjmg8",
+            authDomain: "useful-ui.firebaseapp.com",
+            databaseURL: "https://useful-ui.firebaseio.com",
+            projectId: "useful-ui",
+            storageBucket: "useful-ui.appspot.com",
+            messagingSenderId: "843654157799",
+            appId: "1:843654157799:web:94d56b8f7bca90f5c39942",
+            measurementId: "G-70TGQTDQ4E"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
 </body>
 </html>
