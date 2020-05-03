@@ -84,16 +84,23 @@ $(function() {
     nav.find('#arrow-right').on('click', function () {
         moveSlide(true, timer);
     })
-    sliderShow.find('img').on('swipeleft', function () {
-        moveSlide(true, timer);
-    });
 
     nav.find('#arrow-left').on('click', function () {
         moveSlide(false, timer);
     })
-    sliderShow.find('img').on('swiperight', function () {
-        moveSlide(false, timer);
+
+    let mousePosition = 0;
+    sliderShow.find('img').on('touchstart', e => {
+        mousePosition = e.touches[0]['clientX'];
     })
+    sliderShow.find('img').on('touchend', e => {
+        let delta = e.changedTouches[0].pageX - mousePosition;
+        if (delta > 0 && Math.abs(delta) > (window.innerWidth * .05)) {
+            moveSlide(false, timer);
+        } else if (delta < 0 && Math.abs(delta) > (window.innerWidth * .05)) {
+            moveSlide(true, timer);
+        }
+    });
 });
 
 function moveSlide(moveRight = true, timer = null) {
